@@ -4,6 +4,13 @@ import {
 } from "@/lib/snippets/api-helpers";
 import { hashPassword } from "@/lib/password";
 import { createSnippet } from "@/lib/snippets/store";
+import { corsJson, corsOptions } from "@/lib/cors";
+
+export const dynamic = "force-dynamic";
+
+export function OPTIONS(request: Request) {
+  return corsOptions(request);
+}
 
 export async function POST(request: Request) {
   try {
@@ -15,7 +22,7 @@ export async function POST(request: Request) {
     };
 
     if (!body.unique_code || typeof body.unique_code !== "string") {
-      return Response.json({ error: "unique_code is required" }, { status: 400 });
+      return corsJson(request, { error: "unique_code is required" }, { status: 400 });
     }
 
     const passwordHash =
@@ -30,12 +37,12 @@ export async function POST(request: Request) {
       passwordHash,
     );
 
-    return Response.json(publicSnippet(snippet), { status: 201 });
+    return corsJson(request, publicSnippet(snippet), { status: 201 });
   } catch (err) {
     if (isDuplicateKeyError(err)) {
-      return Response.json({ error: "Snippet already exists" }, { status: 409 });
+      return corsJson(request, { error: "Snippet already exists" }, { status: 409 });
     }
     console.error("POST snippet error:", err);
-    return Response.json({ error: "Failed to create snippet" }, { status: 500 });
+    return corsJson(request, { error: "Failed to create snippet" }, { status: 500 });
   }
 }

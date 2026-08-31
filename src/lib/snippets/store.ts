@@ -1,9 +1,9 @@
-import { connectDb } from "@/lib/db";
+import { connectDb } from "../db";
 import {
   extractLegacyPasswordHash,
   stripPasswordFromCode,
-} from "@/lib/password";
-import { CodeSnippet } from "@/models/CodeSnippet";
+} from "../password";
+import { CodeSnippet } from "../../models/CodeSnippet";
 
 export type SnippetRecord = {
   id: string;

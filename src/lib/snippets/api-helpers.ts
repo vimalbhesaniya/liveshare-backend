@@ -6,6 +6,7 @@ import {
 } from "@/lib/password";
 import { makeViewToken } from "@/lib/view-token";
 import * as store from "@/lib/snippets/store";
+import { corsJson } from "@/lib/cors";
 
 export function authPasswordFromRequest(req: Request, body?: unknown): string | undefined {
   const header = req.headers.get("x-snippet-password");
@@ -66,7 +67,8 @@ export async function requireSnippetAccess(
 
   const provided = authPasswordFromRequest(req, body);
   if (!provided || !verifyPassword(provided, pwdHash)) {
-    return Response.json(
+    return corsJson(
+      req,
       {
         password_required: true,
         id: snippet.id,

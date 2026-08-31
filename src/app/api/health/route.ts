@@ -1,17 +1,24 @@
-import { NextResponse } from "next/server";
 import { connectDb } from "@/lib/db";
+import { corsJson, corsOptions } from "@/lib/cors";
 
-export async function GET() {
+export const dynamic = "force-dynamic";
+
+export function OPTIONS(request: Request) {
+  return corsOptions(request);
+}
+
+export async function GET(request: Request) {
   try {
     await connectDb();
-    return NextResponse.json({
+    return corsJson(request, {
       status: "ok",
       storage: "mongodb",
       database: "connected",
     });
   } catch (err) {
     console.error("Health check failed:", err);
-    return NextResponse.json(
+    return corsJson(
+      request,
       {
         status: "error",
         storage: "mongodb",

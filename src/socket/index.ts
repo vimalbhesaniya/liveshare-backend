@@ -1,10 +1,10 @@
 import type { Server, Socket } from "socket.io";
-import { getSnippet, saveSnippet } from "@/lib/snippets/store";
+import { getSnippet, saveSnippet } from "../lib/snippets/store";
 import {
   resolvePasswordHash,
   verifyPassword,
-} from "@/lib/password";
-import { resolveViewToken } from "@/lib/view-token";
+} from "../lib/password";
+import { resolveViewToken } from "../lib/view-token";
 
 type UserSelection = {
   userId: string;
